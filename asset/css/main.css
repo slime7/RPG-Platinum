@@ -1,0 +1,249 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.4rem;
+}
+
+body.app-body {
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+* {
+  outline: none;
+}
+
+a:visited {
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+md-input-container.hide-error-msg .md-errors-spacer:empty {
+  display: none;
+}
+
+md-card > md-toolbar:first-child {
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 1px rgba(255, 255, 255, 0.1);
+}
+
+md-toolbar.thin {
+  min-height: 48px;
+}
+
+md-toolbar.thin > .md-toolbar-tools {
+  height: 48px;
+  max-height: 48px;
+}
+
+.navbar {
+  background: #f6f6f6 !important;
+  color: #202020 !important;
+}
+
+.navbar md-icon {
+  color: #202020 !important;
+  fill: #202020 !important;
+}
+
+.navbar-logo {
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.navbar-logo img {
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+}
+
+.page-fab.md-fab {
+  position: fixed !important;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s;
+}
+
+.padding-toolbar {
+  visibility: hidden;
+}
+
+.main-container.ng-enter, .main-container.ng-leave {
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+}
+
+.main-container.ng-enter {
+  top: -100%;
+}
+
+.main-container.ng-enter.ng-enter-active {
+  top: 0;
+}
+
+.main-container.ng-leave {
+  top: 0;
+}
+
+.main-container.ng-leave.ng-leave-active {
+  top: 100%;
+}
+
+.click-target {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.breif-card-wrapper {
+  margin: 5px;
+}
+
+.breif-card {
+  position: relative;
+}
+
+.breif-card .cover {
+  position: relative;
+}
+
+.breif-card .cover.column {
+  width: 160px;
+  height: 160px;
+}
+
+.breif-card .cover.row {
+  width: 96px;
+  height: 96px;
+}
+
+.breif-card .cover-image {
+  max-width: 128px;
+  max-height: 128px;
+}
+
+.cover.row .cover-image {
+  max-width: 96px;
+  max-height: 96px;
+}
+
+.breif-card .details {
+  position: relative;
+  padding: 7px 10px 0;
+}
+
+.breif-card .title {
+  color: #222;
+  display: block;
+  font-size: 1.6rem;
+  line-height: 18px;
+  overflow: hidden;
+  text-decoration: none;
+  position: relative;
+  white-space: nowrap;
+}
+
+.breif-card .author-container {
+  position: relative;
+}
+
+.breif-card .author, .breif-card .date {
+  color: #616161;
+  display: inline;
+  font-size: 1.3rem;
+  line-height: 16px;
+  margin: 1px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.breif-card .description {
+  color: #8d8d8d;
+  font-size: 1.3rem;
+  line-height: 18px;
+  margin-top: 10px;
+  position: relative;
+  word-wrap: break-word;
+  max-height: 36px;
+  overflow: hidden;
+}
+
+.breif-card .description.w160 {
+  max-width: 160px;
+}
+
+.rpg-list, .rpg {
+  padding: 0;
+}
+
+.rpg-list {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rpg {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.rpg-breif + .rpg-body, .rpg-body + .rpg-body {
+  /*margin-top: 24px;*/
+}
+
+.rpg-breif .rpg-breif-left, .rpg-breif .rpg-breif-right, .rpg-body {
+  position: relative;
+  /*padding: 8px;*/
+}
+
+.rpg-breif-right .set-cover-btns {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 1;
+}
+
+.rpg-breif-right .cover-preview {
+  max-width: 128px;
+  max-height: 128px;
+}
+
+.new-rpg .rpg-listblock {
+  margin-left: 0px;
+  margin-right: 2px;
+  background-color: rgba(0, 188, 212, .07);
+}
+
+.login-panel .login-panel-frame {
+  background-color: #fff;
+  padding: 15px;
+}
+
+.login-btn md-progress-circular {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.rpg-listblock .level3-wrap {
+  padding-left: 16px;
+}
+
+.rpg-listblock md-checkbox {
+  margin-top: 1em;
+  margin-bottom: 0;
+}

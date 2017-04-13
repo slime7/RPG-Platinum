@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="40"
+  height="40"
+  viewBox="0 0 40 40"
+  fill-rule="evenodd">
+<path style="fill:#000" d="M 0 0L 2 0L 2 19L 38 19L 38 0L 40 0L 40 40L 38 40L 38 21L 24 21L 24 25L 16 25L 16 21L 2 21L 2 40L 0 40L 0 0z"/>
+<path style="fill:#ffff00" d="M 22 23L 18 23L 18 21L 22 21L 22 23z"/>
+<path style="fill:#ffff00" d="M 4 0L 4 17L 18 17L 18 0L 22 0L 22 17L 36 17L 36 0L 38 0L 38 19L 2 19L 2 0L 4 0z"/>
+<path style="fill:#ffff00" d="M 2 21L 16 21L 16 25L 24 25L 24 21L 38 21L 38 40L 2 40L 2 21z"/>
+<path style="fill:#ff0000" d="M 4 23L 14 23L 14 27L 26 27L 26 23L 36 23L 36 34L 34 34L 34 36L 32 36L 32 38L 8 38L 8 36L 6 36L 6 34L 4 34L 4 23z"/>
+<path style="fill:#ff0000" d="M 4 36L 6 36L 6 38L 4 38L 4 36z"/>
+<path style="fill:#ff0000" d="M 34 36L 36 36L 36 38L 34 38L 34 36z"/>
+<path style="fill:#ff0000" d="M 4 0L 4 17L 18 17L 18 0L 4 0z"/>
+<path style="fill:#ffff00" d="M 10 6L 10 10L 12 10L 12 6L 10 6z"/>
+<path style="fill:#ff0000" d="M 22 0L 22 17L 36 17L 36 0L 22 0z"/>
+<path style="fill:#ffff00" d="M 28 6L 28 10L 30 10L 30 6L 28 6z"/>
+</svg>

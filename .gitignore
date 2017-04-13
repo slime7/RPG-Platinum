@@ -1,0 +1,9 @@
+node_modules/
+.idea/
+/nbproject
+composer.phar
+
+.htaccess
+debug_log.txt
+/data/conn.php
+/upload/

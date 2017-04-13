@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="512"
+  height="512"
+  viewBox="-56 -56 512 512"
+  fill-rule="evenodd">
+<path style="fill:#000" d="M 0 0L 20 0L 20 190L 380 190L 380 0L 400 0L 400 400L 380 400L 380 210L 240 210L 240 250L 160 250L 160 210L 20 210L 20 400L 0 400L 0 0z"/>
+<path style="fill:#ffff00" d="M 220 230L 180 230L 180 210L 220 210L 220 230z"/>
+<path style="fill:#ffff00" d="M 40 0L 40 170L 180 170L 180 0L 220 0L 220 170L 360 170L 360 0L 380 0L 380 190L 20 190L 20 0L 40 0z"/>
+<path style="fill:#ffff00" d="M 20 210L 160 210L 160 250L 240 250L 240 210L 380 210L 380 400L 20 400L 20 210z"/>
+<path style="fill:#ff0000" d="M 40 230L 140 230L 140 270L 260 270L 260 230L 360 230L 360 340L 340 340L 340 360L 320 360L 320 380L 80 380L 80 360L 60 360L 60 340L 40 340L 40 230z"/>
+<path style="fill:#ff0000" d="M 40 360L 60 360L 60 380L 40 380L 40 360z"/>
+<path style="fill:#ff0000" d="M 340 360L 360 360L 360 380L 340 380L 340 360z"/>
+<path style="fill:#ff0000" d="M 40 0L 40 170L 180 170L 180 0L 40 0z"/>
+<path style="fill:#ffff00" d="M 100 60L 100 100L 120 100L 120 60L 100 60z"/>
+<path style="fill:#ff0000" d="M 220 0L 220 170L 360 170L 360 0L 220 0z"/>
+<path style="fill:#ffff00" d="M 280 60L 280 100L 300 100L 300 60L 280 60z"/>
+</svg>

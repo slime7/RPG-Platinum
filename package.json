@@ -1,0 +1,18 @@
+{
+  "name": "RPGPlatinum",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Slime7 <slime7@foxmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "del": "^2.0.0",
+    "gulp": "^3.0.0",
+    "gulp-clean-css": "^2.0.0",
+    "gulp-concat": "^2.0.0",
+    "gulp-uglify": "^2.0.0"
+  }
+}
