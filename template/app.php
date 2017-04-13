@@ -114,7 +114,7 @@
       <md-card-content>
         <div class="rpg-listblock">
           <dl ng-repeat="sub_level2 in chapter.sub">
-            <dt class="md-primary md-no-sticky">sub_level2.name</dt>
+            <dt class="md-primary md-no-sticky">{{sub_level2.name}}</dt>
             <dd class="level3-wrap">
               <!-- type: cat -->
               <dl ng-repeat-start="sub_level3 in sub_level2.sub" ng-if="sub_level3.type == 'cat'">
