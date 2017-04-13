@@ -153,11 +153,11 @@
       <md-card-content layout="row" layout-xs="column">
         <div class="rpg-breif-left" flex-gt-xs="50">
           <md-input-container class="md-block hide-error-msg">
-            <label>Title</label>
+            <label>列表标题</label>
             <input ng-model="rpg.newRpgData.breif.title">
           </md-input-container>
           <md-input-container class="md-block hide-error-msg">
-            <label>Description</label>
+            <label>列表描述</label>
             <textarea ng-model="rpg.newRpgData.breif.description" md-maxlength="150" rows="3"></textarea>
           </md-input-container>
         </div>
@@ -190,7 +190,7 @@
       <md-card-title>
         <md-cart-title-text>
           <md-input-container class="hide-error-msg md-headline">
-            <label>Title</label>
+            <label>章名</label>
             <input ng-model="chapter.name">
           </md-input-container>
           <md-button class="md-icon-button"
@@ -205,7 +205,7 @@
             <div ng-if="chapter.type === 'cat'">
               <div>
                 <md-input-container class="hide-error-msg">
-                  <label>sub_level2_Title</label>
+                  <label>子标题</label>
                   <input ng-model="sub_level2.name">
                 </md-input-container>
                 <md-button class="md-icon-button"
@@ -218,7 +218,7 @@
                   <div ng-if="sub_level2.type === 'cat'">
                     <div>
                       <md-input-container class="hide-error-msg">
-                        <label>sub_level3_Title</label>
+                        <label>子标题</label>
                         <input ng-model="sub_level3.name">
                       </md-input-container>
                       <md-button class="md-icon-button"
@@ -230,6 +230,7 @@
                       <div ng-if="sub_level3.type === 'item'">
                         <div layout="row">
                           <md-chips ng-model="sub_level3.sub" md-removable="true"
+                                    md-separator-keys="[13,187,188]"
                                     placeholder="值1,值2..."
                                     md-enable-chip-edit="true"
                                     flex></md-chips>
@@ -252,6 +253,7 @@
                 <div ng-if="sub_level2.type === 'item'">
                   <div layout="row">
                     <md-chips ng-model="sub_level2.sub" md-removable="true"
+                              md-separator-keys="[13,187,188]"
                               placeholder="值1,值2..."
                               md-enable-chip-edit="true"
                               flex></md-chips>
