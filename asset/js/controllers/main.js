@@ -8,7 +8,8 @@
         $scope.page = {
           now: 'datalist.html',
           last: null,
-          config: angular.fromJson(document.querySelector('#page-config').value)
+          config: angular.fromJson(document.querySelector('#page-config').value),
+          loadingCircular: false
         };
         var autoSaveTimeout;
         var subTemplate = {name: '', level: 0, type: 'root', sub: []};
@@ -268,15 +269,19 @@
 
         var main = {
           getRpgData: function (oid) {
+            $scope.page.loadingCircular = true;
             $http.post('actions/ajax.php', {action: 'rpgdetail', oid: oid})
               .then(function (response) {
+                $scope.page.loadingCircular = false;
                 var json = response.data;
                 $scope.rpg.detail = json.data[0];
               });
           },
           getListData: function () {
+            $scope.page.loadingCircular = true;
             $http.post('actions/ajax.php', {action: 'rpglist'})
               .then(function (response) {
+                $scope.page.loadingCircular = false;
                 var json = response.data;
                 $scope.rpg.lists = json.data.orderList;
               });

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" ng-app="RPGPlatinumApp" ng-controller="RPGPlatinum">
 <head>
-  <title>{{title}}</title>
+  <title ng-bind="title">RPG Platinum</title>
   <?php include(ROOT . 'template/meta.php'); ?>
 
   <script
@@ -54,11 +54,16 @@
   </md-toolbar>
   <md-content class="main-container" flex md-scroll-y layout="column">
     <!--div ng-include="page.now" flex="noshrink"></div-->
-    <div ng-view flex="noshrink"></div>
+    <div class="main-container-view" ng-view flex="noshrink"></div>
     <md-button class="page-fab md-fab md-fab-bottom-right scrolling md-warn" ng-click="changepage('newdata.html')">
       <md-icon md-svg-icon="add" aria-label="add"></md-icon>
     </md-button>
   </md-content>
+</div>
+<div class="loading-circular" layout="row" layout-align="center center" ng-if="page.loadingCircular">
+  <md-progress-circular
+    class="md-accent"
+    md-diameter="40"></md-progress-circular>
 </div>
 <script type="text/ng-template" id="datalist.html">
   <div layout="row" layout-wrap layout-align="start start" layout-align-xs="center start" class="rpg-list">
@@ -96,10 +101,12 @@
 </script>
 <script type="text/ng-template" id="datacontent.html">
   <div class="rpg">
-    <md-card class="rpg-breif">
+    <md-card class="rpg-breif" ng-if="rpg.detail.oid">
       <md-card-content layout="row" layout-xs="column">
         <div class="rpg-breif-left" flex-gt-xs="50">
           <h3>{{rpg.detail.title}}</h3>
+          <p>作者:<span>{{rpg.detail.author.username}}</span></p>
+          <p>日期:<span>{{rpg.detail.create_time | date:'longDate'}}</span></p>
           <p>{{rpg.detail.description}}</p>
         </div>
       </md-card-content>

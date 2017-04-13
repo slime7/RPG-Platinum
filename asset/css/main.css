@@ -25,6 +25,10 @@ a {
   color: #333;
 }
 
+dd {
+  margin-left: 1em;
+}
+
 md-input-container.hide-error-msg .md-errors-spacer:empty {
   display: none;
 }
@@ -76,30 +80,49 @@ md-toolbar.thin > .md-toolbar-tools {
   visibility: hidden;
 }
 
-.main-container.ng-enter, .main-container.ng-leave {
-  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+.loading-circular {
+  position: fixed;
+  top: 96px;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+.loading-circular.ng-enter, .loading-circular.ng-leave {
+  transition: all ease 0.5s;
+}
+
+.loading-circular.ng-leave,
+.loading-circular.ng-enter.ng-enter-active {
+  top: 96px;
+}
+
+.loading-circular.ng-enter,
+.loading-circular.ng-leave.ng-leave-active {
+  top: -40px;
+}
+
+.main-container-view.ng-enter, .main-container-view.ng-leave {
+  transition: all ease 0.5s;
+  display: block;
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  display: block;
 }
 
-.main-container.ng-enter {
-  top: -100%;
+.main-container-view.ng-enter {
+  left: 100%;
 }
 
-.main-container.ng-enter.ng-enter-active {
-  top: 0;
+.main-container-view.ng-enter.ng-enter-active {
+  left: 0;
 }
 
-.main-container.ng-leave {
-  top: 0;
-}
-
-.main-container.ng-leave.ng-leave-active {
-  top: 100%;
+.main-container-view.ng-leave.ng-leave-active {
+  left: -100%;
 }
 
 .click-target {
@@ -209,6 +232,13 @@ md-toolbar.thin > .md-toolbar-tools {
 .rpg-breif .rpg-breif-left, .rpg-breif .rpg-breif-right, .rpg-body {
   position: relative;
   /*padding: 8px;*/
+}
+
+.md-headline {
+  white-space: nowrap;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .rpg-breif-right .set-cover-btns {
