@@ -37,7 +37,7 @@ class user
         $uid = preg_replace('/[^0-9]+/', '', $uid);
         $login_string = self::login_string($auth_password);
         $exptime = time() + 900;
-        comm::ssetcookie('token', comm::authcode("{$uid}\t{$username}\t{$exptime}\t{$login_string}", 'ENCODE'), 21600);
+        comm::ssetcookie('token', comm::authcode("{$uid}\t{$username}\t{$exptime}\t{$login_string}", 'ENCODE'), 3600 * 24 * 365);
 
         return true;
       } else {

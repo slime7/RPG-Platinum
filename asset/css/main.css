@@ -234,6 +234,10 @@ md-toolbar.thin > .md-toolbar-tools {
   /*padding: 8px;*/
 }
 
+.rpg-body md-toolbar {
+  z-index: 1;
+}
+
 .md-headline {
   white-space: nowrap;
   max-width: 100%;

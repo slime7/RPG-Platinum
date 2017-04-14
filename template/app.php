@@ -26,8 +26,8 @@
        value="<?= htmlspecialchars(json_encode($page_config, JSON_UNESCAPED_UNICODE)) ?>">
 <div role="main" layout="column" tabindex="-1" flex>
   <md-toolbar md-whiteframe="1" class="navbar">
-    <div class="md-toolbar-tools">
-      <div class="navbar-logo" ng-click="changepage('datalist.html')">
+    <div class="md-toolbar-tools" ng-click="gotop()">
+      <div class="navbar-logo" ng-click="goIndex($event)">
         <img src="asset/img/takara.svg">
       </div>
       <h2>
@@ -39,12 +39,12 @@
                  ng-click="user.loginFrame($event)"
                  ng-disabled="user.info.logining"
                  ng-if="!user.info.uid">
-        登录
+        登入
         <md-progress-circular ng-show="user.info.logining" md-mode="indeterminate"
                               md-diameter="20"></md-progress-circular>
       </md-button>
       <md-button class="md-primary md-raised"
-                 ng-click="user.logout()"
+                 ng-click="user.logout($event)"
                  ng-if="user.info.uid">
         退出
         <md-progress-circular ng-show="user.info.logining" md-mode="indeterminate"
@@ -55,7 +55,9 @@
   <md-content class="main-container" flex md-scroll-y layout="column">
     <!--div ng-include="page.now" flex="noshrink"></div-->
     <div class="main-container-view" ng-view flex="noshrink"></div>
-    <md-button class="page-fab md-fab md-fab-bottom-right scrolling md-warn" ng-click="changepage('newdata.html')">
+    <md-button class="page-fab md-fab md-fab-bottom-right scrolling md-warn"
+               ng-click="changepage('newdata.html')"
+               ng-if="user.info.uid">
       <md-icon md-svg-icon="add" aria-label="add"></md-icon>
     </md-button>
   </md-content>

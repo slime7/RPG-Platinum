@@ -2,6 +2,10 @@
 
 制作和标记RPG游戏中需要完成的目标。
 
+## 预览图
+
+![](asset/img/preview.png)
+
 ## 设置和安装
 
 在你的数据库创建一个叫做`rpgplatinum`的库。

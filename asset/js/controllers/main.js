@@ -80,6 +80,20 @@
           }
         };
 
+        $scope.goIndex = function (ev) {
+          ev.stopPropagation();
+          $scope.changepage('datalist.html');
+        };
+
+        $scope.gotop = function () {
+          var m = document.querySelector('.main-container');
+          var timer = setInterval(function () {
+            m.scrollTop -= Math.ceil((m.scrollTop + m.scrollTop) * 0.1);
+            if (m.scrollTop == 0)
+              clearInterval(timer);
+          }, 10);
+        };
+
         $scope.user = {
           info: {
             username: '',
@@ -129,7 +143,8 @@
                 $scope.user.info.islogin = false;
               });
           },
-          logout: function () {
+          logout: function (ev) {
+            ev.stopPropagation();
             $log.log('Logout.');
             $cookies.remove($scope.page.config.cookieSuffix + 'token');
             $scope.user.info = {
@@ -142,6 +157,7 @@
             };
           },
           loginFrame: function (ev) {
+            ev.stopPropagation();
             var position = $mdPanel.newPanelPosition()
               .relativeTo(ev.toElement)
               .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.BELOW);
@@ -162,11 +178,11 @@
               template: '' +
               '<div md-whiteframe="4" class="login-panel-frame">' +
               '  <md-input-container class="md-block hide-error-msg">' +
-              '    <label>Username</label>' +
+              '    <label>用户名</label>' +
               '    <input ng-model="LoginPanelCtrl.parent.user.info.username" type="text">' +
               '  </md-input-container>' +
               '  <md-input-container class="md-block hide-error-msg">' +
-              '    <label>Password</label>' +
+              '    <label>密码</label>' +
               '    <input ng-model="LoginPanelCtrl.parent.user.info.password" type="password">' +
               '  </md-input-container>' +
               '  <div class="login-error-message" ng-show="LoginPanelCtrl.parent.user.info.msg">' +
@@ -175,11 +191,11 @@
               '  </div>' +
               '  <div layout="row">' +
               '    <md-button ng-click="LoginPanelCtrl.close()" ' +
-              '               ng-disabled="LoginPanelCtrl.parent.user.info.logining">cancel</md-button>' +
+              '               ng-disabled="LoginPanelCtrl.parent.user.info.logining">取消</md-button>' +
               '    <md-button class="md-raised md-primary"' +
               '               ng-click="LoginPanelCtrl.parent.user.login(false, LoginPanelCtrl.close)"' +
               '               ng-disabled="LoginPanelCtrl.parent.user.info.logining">' +
-              '    login' +
+              '    登入' +
               '    </md-button>' +
               '  </div>' +
               '</div>',
@@ -189,7 +205,7 @@
               clickOutsideToClose: false,
               escapeToClose: true,
               focusOnOpen: false,
-              hasBackdrop: true,
+              hasBackdrop: false,
               disableParentScroll: true
             };
             $mdPanel.open(config);
@@ -309,4 +325,5 @@
         main.init();
       }]);
 })(window, angular)
-;;
+;
+;
