@@ -15,6 +15,10 @@
         var subTemplate = {name: '', level: 0, type: 'root', sub: []};
         $scope.rpg = {
           lists: [],
+          listsPager: null,
+          listsLoadMore: function () {
+            main.getListData();
+          },
           detail: {},
           newRpgData: {
             breif: {
@@ -70,6 +74,7 @@
               $location.url('rpg/new');
               break;
             case 'datalist.html':
+              $scope.rpg.listsPager = null;
               $location.url('list');
               main.getListData();
               break;
@@ -295,11 +300,20 @@
           },
           getListData: function () {
             $scope.page.loadingCircular = true;
-            $http.post('actions/ajax.php', {action: 'rpglist'})
+            var req = {action: 'rpglist'};
+            if ($scope.rpg.listsPager && $scope.rpg.listsPager.page !== 1) {
+              req['page'] = $scope.rpg.listsPager.page + 1;
+            }
+            $http.post('actions/ajax.php', req)
               .then(function (response) {
                 $scope.page.loadingCircular = false;
                 var json = response.data;
-                $scope.rpg.lists = json.data.orderList;
+                $scope.rpg.listsPager = json.data.pager;
+                if ($scope.rpg.listsPager.page !== 1) {
+                  angular.extend($scope.rpg.lists, json.data.orderList);
+                } else {
+                  $scope.rpg.lists = json.data.orderList;
+                }
               });
           },
           init: function () {

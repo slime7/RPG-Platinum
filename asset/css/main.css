@@ -181,6 +181,10 @@ md-toolbar.thin > .md-toolbar-tools {
   white-space: nowrap;
 }
 
+.breif-card .title.w140 {
+  max-width: 140px;
+}
+
 .breif-card .author-container {
   position: relative;
 }
@@ -243,6 +247,10 @@ md-toolbar.thin > .md-toolbar-tools {
   max-width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.rpg-breif-right {
+  min-height: 72px;
 }
 
 .rpg-breif-right .set-cover-btns {

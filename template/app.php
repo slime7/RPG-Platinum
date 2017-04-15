@@ -71,15 +71,27 @@
   <div layout="row" layout-wrap layout-align="start start" layout-align-xs="center start" class="rpg-list">
     <div class="breif-card-wrapper" ng-repeat="list in rpg.lists" flex-xs="100">
       <div md-whiteframe="2" class="breif-card" layout-xs="row" layout-gt-xs="column">
-        <div class="cover column" hide-xs show-gt-xs layout="row" layout-align="center center">
+        <div class="cover column"
+             hide-xs show-gt-xs layout="row"
+             layout-align="center center"
+             ng-click="changepage('datacontent.html', list.oid)">
           <img class="cover-image" ng-src="{{list.cover.path || 'asset/img/takara.svg'}}">
         </div>
-        <div class="cover row" hide-gt-xs show-xs layout="row" layout-align="center center">
+        <div class="cover row"
+             hide-gt-xs show-xs layout="row"
+             layout-align="center center"
+             ng-click="changepage('datacontent.html', list.oid)">
           <img class="cover-image" ng-src="{{list.cover.path || 'asset/img/takara.svg'}}">
         </div>
         <div class="details">
           <a class="click-target" href="javascript:;"></a>
-          <div class="title">
+          <div class="title w140" hide-xs show-gt-xs>
+            <a href="javascript:;" title="{{list.title}}"
+               ng-click="changepage('datacontent.html', list.oid)">
+              {{list.title}}
+            </a>
+          </div>
+          <div class="title" hide-gt-xs show-xs>
             <a href="javascript:;" title="{{list.title}}"
                ng-click="changepage('datacontent.html', list.oid)">
               {{list.title}}
@@ -99,6 +111,13 @@
         </div>
       </div>
     </div>
+  </div>
+  <div layout="row" layout-align="center center">
+    <md-button class="md-raised md-primary"
+               ng-click="rpg.listsLoadMore()"
+               ng-disabled="page.loadingCircular"
+               ng-if="rpg.listsPager.page * rpg.listsPager.pagesize < rpg.listsPager.count">更多
+    </md-button>
   </div>
 </script>
 <script type="text/ng-template" id="datacontent.html">
