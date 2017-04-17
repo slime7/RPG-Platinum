@@ -3,7 +3,7 @@
 define('DATA_ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('ROOT', dirname(DATA_ROOT) . DIRECTORY_SEPARATOR);
 
-define('version', '17.04.03');
+define('version', '17.04.04');
 define('cookieSuffix', 'rpgp_');
 define('authcodeKey', 'A66K6ozVsK6g6bZ6E7hohnvhh1Eh6kf6');
 define('usesourcecode', false);
@@ -15,7 +15,7 @@ function s_autoload($class) {
   if (false !== stripos($class, 'slime7\rpgplatinum')) {
     $file_path = $class_dir . str_replace('\\', '/', substr($class, 18)) . '.php';
   } else {
-    $file_path = $class_dir . "{$class}.php";
+    $file_path = $class_dir . str_replace('\\', '/', $class) . '.php';
   }
   $real_path = ROOT . strtolower($file_path);
   if (!file_exists($real_path)) {

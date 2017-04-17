@@ -62,10 +62,10 @@ class order
 
     $image_uploaded_attr['aid'] = 0;
     if (isset($files)) {
-      if (!is_file(ROOT . 'upload')) {
+      if (!is_dir(ROOT . 'upload')) {
         mkdir(ROOT . 'upload');
       }
-      if (!is_file(ROOT . 'upload/image')) {
+      if (!is_dir(ROOT . 'upload/image')) {
         mkdir(ROOT . 'upload/image');
       }
 

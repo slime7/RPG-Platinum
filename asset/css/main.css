@@ -26,7 +26,7 @@ a {
 }
 
 dd {
-  margin-left: 1em;
+  margin-left: 1.5em;
 }
 
 md-input-container.hide-error-msg .md-errors-spacer:empty {
@@ -242,7 +242,19 @@ md-toolbar.thin > .md-toolbar-tools {
   z-index: 1;
 }
 
-.md-headline {
+.rpg-body md-card-title {
+  padding-bottom: 0;
+}
+
+.rpg-body .name-line {
+  width: 100%;
+}
+
+.rpg-body .name-line > md-input-container {
+  width: calc(100% - 60px);
+}
+
+md-toolbar .md-headline {
   white-space: nowrap;
   max-width: 100%;
   text-overflow: ellipsis;
@@ -266,7 +278,7 @@ md-toolbar.thin > .md-toolbar-tools {
 }
 
 .new-rpg .rpg-listblock {
-  margin-left: 0px;
+  margin-left: .8em;
   margin-right: 2px;
   background-color: rgba(0, 188, 212, .07);
 }
@@ -279,10 +291,6 @@ md-toolbar.thin > .md-toolbar-tools {
 .login-btn md-progress-circular {
   display: inline-block;
   vertical-align: middle;
-}
-
-.rpg-listblock .level3-wrap {
-  padding-left: 16px;
 }
 
 .rpg-listblock md-checkbox {

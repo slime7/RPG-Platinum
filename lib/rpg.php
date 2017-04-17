@@ -148,7 +148,7 @@ class rpg
       $this->errorResponse($order->error, false);
     }
 
-    $json->add('post', $post);
+    //$json->add('post', $post);
     $json->success();
     $this->response($json);
   }
@@ -197,10 +197,8 @@ class rpg
     $json = new jsonpack();
     if (!!$msg) {
       $json->setMsg($msg);
-      $json->setStatus(500, $msg);
-    } else {
-      $json->setStatus(500, 'Internal Server Error');
     }
+    $json->setStatus(500, 'Internal Server Error');
 
     if ($isReturn) {
       return $json;

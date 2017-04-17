@@ -2,8 +2,8 @@
   'use strict';
   angular.module('RPGPlatinumApp')
     .controller('RPGPlatinum', [
-      '$scope', '$location', '$http', '$mdPanel', '$log', 'Upload', '$mdToast', '$sce', '$routeParams', '$cookies',
-      function ($scope, $location, $http, $mdPanel, $log, Upload, $mdToast, $sce, $routeParams, $cookies) {
+      '$scope', '$location', '$http', '$mdPanel', '$log', 'Upload', '$mdToast', '$sce', '$routeParams', '$cookies', 'localStorageService',
+      function ($scope, $location, $http, $mdPanel, $log, Upload, $mdToast, $sce, $routeParams, $cookies, localStorageService) {
         $scope.title = 'RPG Platinum';
         $scope.page = {
           now: 'datalist.html',
@@ -13,6 +13,15 @@
         };
         var autoSaveTimeout;
         var subTemplate = {name: '', level: 0, type: 'root', sub: []};
+        var newRpgData = {
+          breif: {
+            title: '',
+            description: '',
+            coverFile: null
+          },
+          chapters: angular.copy(subTemplate),
+          tempChapterName: ''
+        };
         $scope.rpg = {
           lists: [],
           listsPager: null,
@@ -20,15 +29,7 @@
             main.getListData();
           },
           detail: {},
-          newRpgData: {
-            breif: {
-              title: '',
-              description: '',
-              coverFile: null
-            },
-            chapters: angular.copy(subTemplate),
-            tempChapterName: ''
-          },
+          newRpgData: angular.copy(newRpgData),
           loading: false
         };
         $scope.progress = {
@@ -60,7 +61,12 @@
                   main.toast(json.msg);
                 }
               }, function (response) {
-                main.toast('server error.');
+                var json = response.data;
+                if (json.msg) {
+                  main.toast(json.msg);
+                } else {
+                  main.toast('server error.');
+                }
               });
           }
         };
@@ -72,6 +78,9 @@
           switch (page) {
             case 'newdata.html':
               $location.url('rpg/new');
+              if (!!localStorageService.get('newRpgData')) {
+                main.getLocalData();
+              }
               break;
             case 'datalist.html':
               $scope.rpg.listsPager = null;
@@ -97,6 +106,10 @@
             if (m.scrollTop == 0)
               clearInterval(timer);
           }, 10);
+        };
+
+        $scope.clearNewRpgData = function () {
+          $scope.rpg.newRpgData = angular.copy(newRpgData);
         };
 
         $scope.user = {
@@ -144,7 +157,12 @@
                 $scope.user.info.password = '';
                 $scope.user.info.logining = false;
               }, function (response) {
-                $scope.user.info.msg = 'server error.';
+                var json = response.data;
+                if (json.msg) {
+                  main.toast(json.msg);
+                } else {
+                  main.toast('server error.');
+                }
                 $scope.user.info.islogin = false;
               });
           },
@@ -230,10 +248,10 @@
                 sub.level = parent.level + 1;
                 parent.type = 'cat';
                 parent.sub.push(sub);
+                localStorageService.set('newRpgData', $scope.rpg.newRpgData);
               }
             } catch (e) {
-              console.log(e.message);
-              console.log(parent);
+              $log.log(e.message);
             }
           },
           removesub: function (parent, self) {
@@ -276,13 +294,19 @@
               .then(function (response) {
                 var json = response.data;
                 if (json.success) {
-                  $location.url('list');
+                  localStorageService.remove('newRpgData');
+                  $scope.changepage('datalist.html');
                 } else {
                   main.toast(json.msg);
                 }
                 $scope.rpg.loading = false;
               }, function (response) {
-                main.toast('server error.');
+                var json = response.data;
+                if (json.msg) {
+                  main.toast(json.msg);
+                } else {
+                  main.toast('server error.');
+                }
                 $scope.rpg.loading = false;
               });
           }
@@ -316,6 +340,10 @@
                 }
               });
           },
+          getLocalData: function () {
+            $scope.rpg.newRpgData = localStorageService.get('newRpgData');
+            main.toast('发现未提交的数据并已加载。');
+          },
           init: function () {
             $scope.user.login(true);
             if (/^\/list$/i.test($location.path()) || $location.path() == '') {
@@ -323,6 +351,9 @@
             }
             if (/^\/rpg\/\d+$/i.test($location.path())) {
               main.getRpgData($location.path().substr(5));
+            }
+            if (/^\/rpg\/new$/i.test($location.path())) {
+              main.getLocalData();
             }
           },
           toast: function (msg, delay) {

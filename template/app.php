@@ -149,9 +149,9 @@
             <dt class="md-primary md-no-sticky"
                 ng-if="sub_level3.type == 'cat'">{{sub_level3.name}}
             </dt>
-            <dd layout="row" layout-wrap ng-if="sub_level3.type == 'cat'">
+            <dd ng-if="sub_level3.type == 'cat'">
               <md-checkbox ng-repeat="item in sub_level3.sub"
-                           class="md-warn" flex="noshrink"
+                           class="md-warn"
                            ng-model="rpg.detail.progress[item.oiid]"
                            ng-change="progress.delaySave()">
                 {{item.name}}
@@ -162,7 +162,7 @@
           <!-- end type: cat -->
           <!-- type: item -->
           <md-checkbox ng-repeat-end ng-if="sub_level3.type == 'item'"
-                       class="md-warn" flex="noshrink"
+                       class="md-warn"
                        ng-model="rpg.detail.progress[sub_level3.oiid]"
                        ng-change="progress.delaySave()">
             {{sub_level3.name}}
@@ -216,7 +216,7 @@
     <md-card class="rpg-body"
              ng-repeat="chapter in rpg.newRpgData.chapters.sub">
       <md-card-title>
-        <md-cart-title-text>
+        <md-cart-title-text class="name-line">
           <md-input-container class="hide-error-msg md-headline">
             <label>章名</label>
             <input ng-model="chapter.name">
@@ -231,7 +231,7 @@
         <div class="rpg-listblock">
           <div ng-repeat="sub_level2 in chapter.sub">
             <div ng-if="chapter.type === 'cat'">
-              <div>
+              <div class="name-line">
                 <md-input-container class="hide-error-msg">
                   <label>子标题</label>
                   <input ng-model="sub_level2.name">
@@ -244,7 +244,7 @@
               <div class="rpg-listblock">
                 <div ng-repeat="sub_level3 in sub_level2.sub">
                   <div ng-if="sub_level2.type === 'cat'">
-                    <div>
+                    <div class="name-line">
                       <md-input-container class="hide-error-msg">
                         <label>子标题</label>
                         <input ng-model="sub_level3.name">
