@@ -121,6 +121,10 @@
             logining: false,
             msg: ''
           },
+          userMenu: function ($mdMenu, ev) {
+            ev.stopPropagation();
+            $mdMenu.open(ev);
+          },
           login: function (check, close) {
             check = check || false;
             if (!check) {
@@ -325,7 +329,7 @@
           getListData: function () {
             $scope.page.loadingCircular = true;
             var req = {action: 'rpglist'};
-            if ($scope.rpg.listsPager && $scope.rpg.listsPager.page !== 1) {
+            if ($scope.rpg.listsPager && $scope.rpg.listsPager.page) {
               req['page'] = $scope.rpg.listsPager.page + 1;
             }
             $http.post('actions/ajax.php', req)
@@ -334,10 +338,13 @@
                 var json = response.data;
                 $scope.rpg.listsPager = json.data.pager;
                 if ($scope.rpg.listsPager.page !== 1) {
-                  angular.extend($scope.rpg.lists, json.data.orderList);
+                  angular.forEach(json.data.orderList, function (rpg) {
+                    $scope.rpg.lists.push(rpg);
+                  });
                 } else {
                   $scope.rpg.lists = json.data.orderList;
                 }
+                $log.log($scope.rpg.lists);
               });
           },
           getLocalData: function () {
@@ -347,12 +354,15 @@
           init: function () {
             $scope.user.login(true);
             if (/^\/list$/i.test($location.path()) || $location.path() == '') {
+              $scope.page.now = 'datalist.html';
               main.getListData();
             }
             if (/^\/rpg\/\d+$/i.test($location.path())) {
+              $scope.page.now = 'datacontent.html';
               main.getRpgData($location.path().substr(5));
             }
             if (/^\/rpg\/new$/i.test($location.path())) {
+              $scope.page.now = 'newdata.html';
               main.getLocalData();
             }
           },

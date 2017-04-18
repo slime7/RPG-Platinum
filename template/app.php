@@ -34,7 +34,6 @@
         <span>{{title}}</span>
       </h2>
       <span flex></span>
-      <span ng-if="user.info.uid">{{ user.info.username }}</span>
       <md-button class="md-primary login-btn"
                  ng-click="user.loginFrame($event)"
                  ng-disabled="user.info.logining"
@@ -43,13 +42,20 @@
         <md-progress-circular ng-show="user.info.logining" md-mode="indeterminate"
                               md-diameter="20"></md-progress-circular>
       </md-button>
-      <md-button class="md-primary md-raised"
-                 ng-click="user.logout($event)"
-                 ng-if="user.info.uid">
-        退出
-        <md-progress-circular ng-show="user.info.logining" md-mode="indeterminate"
-                              md-diameter="20"></md-progress-circular>
-      </md-button>
+      <md-menu md-offset="0 32" md-position-mode="target-right target" ng-if="user.info.uid">
+        <md-button class="md-icon-button" ng-click="user.userMenu($mdMenu, $event)">
+          <md-icon md-menu-origin md-svg-icon="more_vert" aria-label="user menu"></md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item>
+            <md-button disabled="disabled">{{ user.info.username }}</md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button ng-click="user.logout($event)">退出</md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
     </div>
   </md-toolbar>
   <md-content class="main-container" flex md-scroll-y layout="column">
@@ -57,7 +63,7 @@
     <div class="main-container-view" ng-view flex="noshrink"></div>
     <md-button class="page-fab md-fab md-fab-bottom-right scrolling md-warn"
                ng-click="changepage('newdata.html')"
-               ng-if="user.info.uid">
+               ng-if="user.info.uid && page.now !== 'newdata.html'">
       <md-icon md-svg-icon="add" aria-label="add"></md-icon>
     </md-button>
   </md-content>
