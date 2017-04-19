@@ -68,6 +68,12 @@ md-toolbar.thin > .md-toolbar-tools {
   height: 40px;
 }
 
+.search-bar {
+  margin: 1.5em 0;
+  width: 420px;
+  max-width: 420px;
+}
+
 .page-fab.md-fab {
   position: fixed !important;
   -webkit-transition: -webkit-transform 0.2s;

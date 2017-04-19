@@ -109,6 +109,9 @@ class rpg
     $page = isset($post['page']) ? $post['page'] : 1;
     $pagesize = isset($post['pagesize']) ? $post['pagesize'] : 20;
     $order = new order();
+    if (isset($post['query']) && !!trim($post['query'])) {
+      $order->setQuery($post['query']);
+    }
     $orderList = $order->lists($page, $pagesize, false);
 
     $json->set($orderList);

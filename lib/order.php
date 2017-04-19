@@ -176,15 +176,15 @@ class order
             $filter_enabled[] = "(`oid` IN ({$o_q}))";
             break;
           case 'query':
-            $q = saddslashes($f[1]);
-            $filter_enabled[] = "(`remark` LIKE '%{$q}%')";
+            $q = comm::saddslashes($f[1]);
+            $filter_enabled[] = "(`title` LIKE '%{$q}%' OR `description` LIKE '%{$q}%')";
             unset($q);
             break;
           case 'user':
             $isId = preg_match('#^(\d+[,])*(\d+)$#', $f[1]);
-            $q = saddslashes($f[1]);
-            $id_query = $isId ? $q : "SELECT `uid` FROM `member` WHERE `username` LIKE '%{$q}%'";
-            $filter_enabled[] = "(`{$f[0]}_id` IN ({$id_query}))";
+            $q = comm::saddslashes($f[1]);
+            $id_query = $isId ? $q : "SELECT `uid` FROM `user` WHERE `username` LIKE '%{$q}%'";
+            $filter_enabled[] = "(`author` IN ({$id_query}))";
             break;
           case 'open':
             if ($f[1] == 'true') {
@@ -201,10 +201,10 @@ class order
           case 'date':
             $range = explode('..', $f[1]);
             if ($range[0] != '*') {
-              $filter_enabled[] = '(`date` >= ' . strtotime($range[0]) . ')';
+              $filter_enabled[] = '(`create_time` >= ' . strtotime($range[0]) . ')';
             }
             if ($range[1] != '*') {
-              $filter_enabled[] = '(`date` <= ' . strtotime($range[1]) . ')';
+              $filter_enabled[] = '(`create_time` <= ' . strtotime($range[1]) . ')';
             }
             break;
         }
@@ -232,6 +232,10 @@ class order
       return false;
     }
     $this->breif();
+    if ($this->oid == []) {
+      $this->orderList = [];
+      return [];
+    }
     $orderList = $this->order_breif;
     if (!(is_array($this->oid) && count($this->oid) > 1)) {
       $orderList[$this->oid[0]]['chapters'] = $this->getChapters();
@@ -247,7 +251,7 @@ class order
     global $db;
     $where = '';
     $orderList = [];
-    if (!$this->oid) {
+    if (!$this->oid || $this->oid == []) {
       $this->order_breif = $orderList;
       return $this->order_breif;
     }
@@ -498,7 +502,7 @@ sql;
   }
 
   public function setQuery($query) {
-    $this->query = $query;
+    $this->query = trim($query);
   }
 
   public function setSort($order = 'oid', $sort = 'ASC') {

@@ -25,6 +25,7 @@
         $scope.rpg = {
           lists: [],
           listsPager: null,
+          listsQuery: '',
           listsLoadMore: function () {
             main.getListData();
           },
@@ -46,6 +47,8 @@
               autoSaveTimeout = setTimeout(function () {
                 $scope.progress.save();
               }, 10000);
+            } else {
+              localStorageService.set('progress', $scope.rpg.detail.progress);
             }
           },
           load: function () {
@@ -96,7 +99,15 @@
 
         $scope.goIndex = function (ev) {
           ev.stopPropagation();
+          $scope.rpg.listsQuery = '';
           $scope.changepage('datalist.html');
+        };
+
+        $scope.search = function (ev) {
+          var key = ev.keyCode;
+          if (key === 13 && !!$scope.rpg.listsQuery) {
+            $scope.changepage('datalist.html');
+          }
         };
 
         $scope.gotop = function () {
@@ -324,6 +335,7 @@
                 $scope.page.loadingCircular = false;
                 var json = response.data;
                 $scope.rpg.detail = json.data[0];
+                main.getLocalProgress();
               });
           },
           getListData: function () {
@@ -331,6 +343,9 @@
             var req = {action: 'rpglist'};
             if ($scope.rpg.listsPager && $scope.rpg.listsPager.page) {
               req['page'] = $scope.rpg.listsPager.page + 1;
+            }
+            if (!!$scope.rpg.listsQuery) {
+              req['query'] = $scope.rpg.listsQuery;
             }
             $http.post('actions/ajax.php', req)
               .then(function (response) {
@@ -344,12 +359,18 @@
                 } else {
                   $scope.rpg.lists = json.data.orderList;
                 }
-                $log.log($scope.rpg.lists);
               });
           },
           getLocalData: function () {
-            $scope.rpg.newRpgData = localStorageService.get('newRpgData');
-            main.toast('发现未提交的数据并已加载。');
+            if (!!localStorageService.get('newRpgData')) {
+              $scope.rpg.newRpgData = localStorageService.get('newRpgData');
+              main.toast('发现未提交的数据并已加载。');
+            }
+          },
+          getLocalProgress: function () {
+            if (!!$scope.user.islogin && !!localStorageService.get('progress')) {
+              $scope.rpg.detail.progress = localStorageService.get('progress');
+            }
           },
           init: function () {
             $scope.user.login(true);

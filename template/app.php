@@ -4,21 +4,6 @@
   <title ng-bind="title">RPG Platinum</title>
   <?php include(ROOT . 'template/meta.php'); ?>
 
-  <script
-    src="https://cdn.jsdelivr.net/g/angularjs@1.6.0(angular.min.js+angular-animate.min.js+angular-aria.min.js+angular-cookies.min.js+angular-route.min.js+i18n/angular-locale_zh.js),angular.material@1.1.3,angular-local-storage@0.5.2(angular-local-storage.min.js),angular.file-upload@12.2.13"></script>
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/g/angular.material@1.1.3(angular-material.min.css)">
-  <!--link rel="stylesheet" href="asset/material-icons/material-icons.css"-->
-
-  <?php if (usesourcecode) : ?>
-    <script src="asset/js/app.js<?= '?v=' . version ?>"></script>
-    <script src="asset/js/controllers/main.js<?= '?v=' . version ?>"></script>
-  <link rel="Stylesheet" type="text/css" href="asset/css/main.css<?= '?v=' . version ?>">
-  <?php else: ?>
-    <script src="asset/dist/rpgplatinum.min.js<?= '?v=' . version ?>"></script>
-  <link rel="Stylesheet" type="text/css" href="asset/dist/rpgplatinum.min.css<?= '?v=' . version ?>">
-  <?php endif; ?>
-
   <base href="/">
 </head>
 <body class="app-body" layout="row">
@@ -73,8 +58,33 @@
     class="md-accent"
     md-diameter="40"></md-progress-circular>
 </div>
+
+<script
+  src="https://cdn.jsdelivr.net/g/angularjs@1.6.0(angular.min.js+angular-animate.min.js+angular-aria.min.js+angular-cookies.min.js+angular-route.min.js+i18n/angular-locale_zh.js),angular.material@1.1.3,angular-local-storage@0.5.2(angular-local-storage.min.js),angular.file-upload@12.2.13"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/g/angular.material@1.1.3(angular-material.min.css)">
+<!--link rel="stylesheet" href="asset/material-icons/material-icons.css"-->
+
+<?php if (usesourcecode) : ?>
+  <script src="asset/js/app.js<?= '?v=' . version ?>"></script>
+  <script src="asset/js/controllers/main.js<?= '?v=' . version ?>"></script>
+<link rel="Stylesheet" type="text/css" href="asset/css/main.css<?= '?v=' . version ?>">
+<?php else: ?>
+  <script src="asset/dist/rpgplatinum.min.js<?= '?v=' . version ?>"></script>
+<link rel="Stylesheet" type="text/css" href="asset/dist/rpgplatinum.min.css<?= '?v=' . version ?>">
+<?php endif; ?>
+
 <script type="text/ng-template" id="datalist.html">
+  <div layout="row" layout-align="center center">
+    <md-input-container class="search-bar hide-error-msg md-block">
+      <label>搜索</label>
+      <input ng-model="rpg.listsQuery" ng-keyup="search($event)">
+    </md-input-container>
+  </div>
   <div layout="row" layout-wrap layout-align="start start" layout-align-xs="center start" class="rpg-list">
+    <div class="md-display-1" ng-if="!page.loadingCircular && !rpg.lists.length" flex="100">
+      真遗憾，什么都没有。
+    </div>
     <div class="breif-card-wrapper" ng-repeat="list in rpg.lists" flex-xs="100">
       <div md-whiteframe="2" class="breif-card" layout-xs="row" layout-gt-xs="column">
         <div class="cover column"
