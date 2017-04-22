@@ -7,6 +7,9 @@
   <base href="/">
 </head>
 <body class="app-body" layout="row">
+<div ng-hide="pageloaded"
+     style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:201;background-color: #fff;">
+</div>
 <input type="hidden" id="page-config"
        value="<?= htmlspecialchars(json_encode($page_config, JSON_UNESCAPED_UNICODE)) ?>">
 <div role="main" layout="column" tabindex="-1" flex>
@@ -27,6 +30,10 @@
         <md-progress-circular ng-show="user.info.logining" md-mode="indeterminate"
                               md-diameter="20"></md-progress-circular>
       </md-button>
+      <md-button class="md-raised md-accent"
+                 ng-if="!user.info.uid"
+                 ng-click="user.registerPanel($event)">注册
+      </md-button>
       <md-menu md-offset="0 32" md-position-mode="target-right target" ng-if="user.info.uid">
         <md-button class="md-icon-button" ng-click="user.userMenu($mdMenu, $event)">
           <md-icon md-menu-origin md-svg-icon="more_vert" aria-label="user menu"></md-icon>
@@ -36,6 +43,9 @@
             <md-button disabled="disabled">{{ user.info.username }}</md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button ng-href="#!/user/{{user.info.username}}">个人信息</md-button>
+          </md-menu-item>
           <md-menu-item>
             <md-button ng-click="user.logout($event)">退出</md-button>
           </md-menu-item>
@@ -60,7 +70,7 @@
 </div>
 
 <script
-  src="https://cdn.jsdelivr.net/g/angularjs@1.6.0(angular.min.js+angular-animate.min.js+angular-aria.min.js+angular-cookies.min.js+angular-route.min.js+i18n/angular-locale_zh.js),angular.material@1.1.3,angular-local-storage@0.5.2(angular-local-storage.min.js),angular.file-upload@12.2.13"></script>
+  src="https://cdn.jsdelivr.net/g/angularjs@1.6.0(angular.min.js+angular-animate.min.js+angular-aria.min.js+angular-cookies.min.js+angular-route.min.js+i18n/angular-locale_zh.js),angular.material@1.1.4,angular-local-storage@0.5.2(angular-local-storage.min.js),angular.file-upload@12.2.13"></script>
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/g/angular.material@1.1.3(angular-material.min.css)">
 <!--link rel="stylesheet" href="asset/material-icons/material-icons.css"-->
@@ -114,7 +124,9 @@
             </a>
           </div>
           <div class="author-container">
-            <a class="author" href="javascript:;" title="{{list.author.username}}">{{list.author.username}}</a>
+            <a class="author"
+               ng-href="#!/user/{{list.author.username}}"
+               title="{{list.author.username}}">{{list.author.username}}</a>
           </div>
           <div class="description w160" hide-xs show-gt-xs>
             <md-tooltip>{{list.description}}</md-tooltip>
@@ -345,6 +357,63 @@
     </md-card>
     <i>&nbsp;</i>
   </form>
+</script>
+<script type="text/ng-template" id="userdata.html">
+  <div class="rpg">
+    <div md-whiteframe="2" layout-padding ng-if="userdetail">
+      <strong class="md-headline">{{userdetail.username}}</strong>
+      <p><span ng-bind="userdetail.create_time * 1000 | date:'y-M-d'"></span> 加入</p>
+      <p>
+        <a ng-href="#!/list/uid:{{userdetail.uid}}"><strong ng-bind="userdetail.order_count"></strong> 个列表</a>
+      </p>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="registerPanel.html">
+  <md-dialog class="register-panel" aria-label="register">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>用户注册</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="registerPanel.close()">
+          <md-icon md-svg-icon="close" aria-label="close"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <md-input-container class="hide-error-msg md-block">
+          <label>用户名</label>
+          <input placeholder="字母、数字、下划线且不以数字开头"
+                 maxlength="16"
+                 ng-model="registerPanel.registerInfo.username">
+        </md-input-container>
+        <md-input-container class="hide-error-msg md-block">
+          <label>密码</label>
+          <input maxlength="64"
+                 type="password"
+                 ng-model="registerPanel.registerInfo.password">
+        </md-input-container>
+        <md-input-container class="hide-error-msg md-block">
+          <label>确认密码</label>
+          <input maxlength="64"
+                 type="password"
+                 ng-model="registerPanel.registerInfo.password2">
+        </md-input-container>
+        <div ng-if="!!registerPanel.parent.user.info.msg" md-colors="{color: 'default-red'}">
+          {{registerPanel.parent.user.info.msg}}
+        </div>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <span flex></span>
+      <md-button class="md-primary" ng-click="registerPanel.close()">放弃</md-button>
+      <md-button class="md-raised md-primary"
+                 ng-disabled="registerPanel.parent.user.info.logining"
+                 ng-click="registerPanel.register()">注册
+      </md-button>
+    </md-dialog-actions>
+  </md-dialog>
 </script>
 </body>
 </html>

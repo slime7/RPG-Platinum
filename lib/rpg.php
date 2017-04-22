@@ -58,6 +58,14 @@ class rpg
       case 'logout':
         break;
 
+      case 'register':
+        $this->register($json, $post);
+        break;
+
+      case 'userdetail':
+        $this->userdetail($json, $post);
+        break;
+
       default:
         $this->test();
         break;
@@ -103,6 +111,35 @@ class rpg
 
   private function logout() {
     //pass
+  }
+
+  private function register(jsonpack $json, $post) {
+    if (!isset($post['username']) || !isset($post['password'])) {
+      $this->errorResponse('Unkonw action.', false);
+    }
+
+    $register_result = user::register($post);
+    if ($register_result) {
+      $json->success();
+    } else {
+      $json->setMsg(user::$error);
+    }
+    $this->response($json);
+  }
+
+  private function userdetail(jsonpack $json, $post) {
+    if (!isset($post['username'])) {
+      $this->errorResponse('Unkonw action.', false);
+    }
+
+    $user = user::detailbyusername($post['username']);
+    if (!!$user) {
+      $json->success();
+      $json->set($user);
+    } else {
+      $json->setMsg('未找到此用户。');
+    }
+    $this->response($json);
   }
 
   private function listAction(jsonpack $json, $post) {

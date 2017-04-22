@@ -303,3 +303,7 @@ md-toolbar .md-headline {
   margin-top: 1em;
   margin-bottom: 0;
 }
+
+.register-panel {
+  min-width: 350px;
+}

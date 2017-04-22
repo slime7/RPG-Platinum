@@ -2,8 +2,39 @@
   'use strict';
   angular.module('RPGPlatinumApp')
     .controller('RPGPlatinum', [
-      '$scope', '$location', '$http', '$mdPanel', '$log', 'Upload', '$mdToast', '$sce', '$routeParams', '$cookies', 'localStorageService',
-      function ($scope, $location, $http, $mdPanel, $log, Upload, $mdToast, $sce, $routeParams, $cookies, localStorageService) {
+      '$rootScope', '$scope', '$location', '$http', '$mdPanel', '$log', 'Upload', '$mdToast', '$sce', '$routeParams', '$cookies', 'localStorageService', '$mdDialog',
+      function ($rootScope, $scope, $location, $http, $mdPanel, $log, Upload, $mdToast, $sce, $routeParams, $cookies, localStorageService, $mdDialog) {
+        $rootScope.$on('$locationChangeStart', function (event) {
+          // Check if there is a dialog active
+          if (angular.element(document).find('md-dialog').length > 0) {
+            event.preventDefault(); // Prevent route from changing
+            $mdDialog.cancel();  // Cancel the active dialog
+          }
+        });
+        $rootScope.$on('$routeChangeStart', function (event, next) {
+          switch (next.templateUrl) {
+            case 'newdata.html':
+              if ($scope.user.info.islogin) {
+                main.getLocalData();
+              } else {
+                $location.url('list');
+              }
+              break;
+            case 'datalist.html':
+              if (!!next.params.query) {
+                $scope.rpg.listsQuery = next.params.query.replace('+', ' ');
+              }
+              main.getListData();
+              break;
+            case 'datacontent.html':
+              main.getRpgData(next.params.oid);
+              break;
+            case 'userdata.html':
+              main.getUserData(next.params.username);
+              break;
+          }
+        });
+
         $scope.title = 'RPG Platinum';
         $scope.page = {
           now: 'datalist.html',
@@ -80,19 +111,24 @@
 
           switch (page) {
             case 'newdata.html':
-              $location.url('rpg/new');
-              if (!!localStorageService.get('newRpgData')) {
-                main.getLocalData();
+              if ($scope.user.info.islogin) {
+                $location.url('rpg/new');
+              } else {
+                $location.url('list');
               }
               break;
             case 'datalist.html':
-              $scope.rpg.listsPager = null;
-              $location.url('list');
-              main.getListData();
+              if (!!p) {
+                $location.url('list/' + p.replace(' ', '+'));
+              } else {
+                $location.url('list');
+              }
               break;
             case 'datacontent.html':
               $location.url('rpg/' + p);
-              main.getRpgData(p);
+              break;
+            case 'userdata.html':
+              $location.url('user/' + p);
               break;
           }
         };
@@ -106,7 +142,7 @@
         $scope.search = function (ev) {
           var key = ev.keyCode;
           if (key === 13 && !!$scope.rpg.listsQuery) {
-            $scope.changepage('datalist.html');
+            $scope.changepage('datalist.html', $scope.rpg.listsQuery);
           }
         };
 
@@ -209,6 +245,8 @@
                 function (mdPanelRef) {
                   this.parent = $scope;
                   this.close = function () {
+                    $scope.user.info.logining = false;
+                    $scope.user.info.msg = '';
                     mdPanelRef.close();
                   }
                 }],
@@ -247,6 +285,68 @@
               disableParentScroll: true
             };
             $mdPanel.open(config);
+          },
+          registerPanel: function (ev) {
+            $mdDialog.show({
+              controller: ['$mdDialog',
+                function ($mdDialog) {
+                  this.parent = $scope;
+                  this.registerInfo = {
+                    username: '',
+                    password: '',
+                    password2: ''
+                  };
+                  this.close = function () {
+                    $scope.user.info.logining = false;
+                    $scope.user.info.msg = '';
+                    $mdDialog.hide();
+                  };
+                  this.register = function () {
+                    if (!/^[A-Za-z_][A-Za-z0-9_]+$/.test(this.registerInfo.username)) {
+                      $scope.user.info.msg = '用户名只允许使用字母、数字、下划线且不以数字开头。';
+                      return false;
+                    }
+                    if (this.registerInfo.password === ''
+                      || this.registerInfo.password !== this.registerInfo.password2) {
+                      $scope.user.info.msg = '两次密码不一样。';
+                      return false;
+                    }
+                    var req = {
+                      action: 'register',
+                      username: this.registerInfo.username,
+                      password: this.registerInfo.password
+                    };
+                    $scope.user.info.logining = true;
+                    $http.post('actions/ajax.php', req)
+                      .then(function (response) {
+                        var json = response.data;
+                        if (json.success) {
+                          $scope.user.info.username = req.username;
+                          $scope.user.info.password = req.password;
+                          $scope.user.login();
+                          $mdDialog.hide();
+                        } else {
+                          $scope.user.info.msg = json.msg;
+                        }
+                        $scope.user.info.logining = false;
+                      }, function (response) {
+                        var json = response.data;
+                        if (json.msg) {
+                          main.toast(json.msg);
+                        } else {
+                          main.toast('server error.');
+                        }
+                        $scope.user.info.logining = false;
+                      });
+                  };
+                }],
+              controllerAs: 'registerPanel',
+              templateUrl: 'registerPanel.html',
+              parent: angular.element(document.querySelector('.main-container')),
+              targetEvent: ev,
+              clickOutsideToClose: false,
+              fullscreen: true
+            });
           }
         };
 
@@ -339,6 +439,7 @@
               });
           },
           getListData: function () {
+            $scope.rpg.listsPager = null;
             $scope.page.loadingCircular = true;
             var req = {action: 'rpglist'};
             if ($scope.rpg.listsPager && $scope.rpg.listsPager.page) {
@@ -359,6 +460,14 @@
                 } else {
                   $scope.rpg.lists = json.data.orderList;
                 }
+              }, function (response) {
+                $scope.page.loadingCircular = false;
+                var json = response.data;
+                if (json.msg) {
+                  main.toast(json.msg);
+                } else {
+                  main.toast('server error.');
+                }
               });
           },
           getLocalData: function () {
@@ -372,20 +481,35 @@
               $scope.rpg.detail.progress = localStorageService.get('progress');
             }
           },
+          getUserData: function (username) {
+            $scope.page.loadingCircular = true;
+            $scope.userdetail = null;
+            $http.post('actions/ajax.php',
+              {
+                action: 'userdetail',
+                username: username
+              })
+              .then(function (response) {
+                $scope.page.loadingCircular = false;
+                var json = response.data;
+                if (json.success) {
+                  $scope.userdetail = json.data;
+                } else {
+                  main.toast(json.msg);
+                }
+              }, function (response) {
+                $scope.page.loadingCircular = false;
+                var json = response.data;
+                if (json.msg) {
+                  main.toast(json.msg);
+                } else {
+                  main.toast('server error.');
+                }
+              });
+          },
           init: function () {
             $scope.user.login(true);
-            if (/^\/list$/i.test($location.path()) || $location.path() == '') {
-              $scope.page.now = 'datalist.html';
-              main.getListData();
-            }
-            if (/^\/rpg\/\d+$/i.test($location.path())) {
-              $scope.page.now = 'datacontent.html';
-              main.getRpgData($location.path().substr(5));
-            }
-            if (/^\/rpg\/new$/i.test($location.path())) {
-              $scope.page.now = 'newdata.html';
-              main.getLocalData();
-            }
+            $scope.pageloaded = true;
           },
           toast: function (msg, delay) {
             delay = delay || '3000';

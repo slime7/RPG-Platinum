@@ -11,6 +11,7 @@ class user
 {
 
   private static $salt;
+  public static $error = null;
 
   /**
    * 登录
@@ -106,6 +107,10 @@ class user
   public static function register(array $info) {
     global $uid, $username, $db;
 
+    if (!self::checkusername($info['username'])) {
+      return false;
+    }
+
     $now = time();
     $username = comm::saddslashes(strtolower($info['username']));
     $password = $info['password'];
@@ -114,14 +119,14 @@ class user
     $auth_password = self::password_auth($password);
 
     $insertUser = $db->query("INSERT INTO `user`(`username`, `hash`, `create_time`) VALUES ('{$username}', '{$auth_password}', {$now})");
-
+    $insertUser = 1;
     if ($insertUser) {
       $uid = $db->insert_id;
 
       return $uid;
     } else {
       unset($uid, $username);
-
+      self::$error = '可能没注册成功。';
       return false;
     }
   }
@@ -192,6 +197,22 @@ class user
     return $user;
   }
 
+  public static function detailbyusername($username) {
+    global $db;
+    $_username = comm::saddslashes($username);
+    $user_result = $db->query("SELECT `uid`, `username`, `create_time`, (SELECT COUNT(`oid`) FROM `rpgp_order_breif` WHERE `author` = `uid`) AS `order_count` FROM `user` WHERE `username` = '{$_username}' LIMIT 1");
+    if ($user_result && $user_result->num_rows) {
+      $user = $user_result->fetch_assoc();
+      $user['uid'] = (int)$user['uid'];
+      $user['create_time'] = (int)$user['create_time'];
+      $user['order_count'] = (int)$user['order_count'];
+    } else {
+      $user = null;
+    }
+
+    return $user;
+  }
+
   public static function lists($page = 1, $sortby = 'uid', $filter = null) {
     $pagesize = 20;
     $uids = self::uid_source($sortby, $filter);
@@ -254,31 +275,29 @@ class user
   /**
    *
    * @param string $username
-   * @return int <p>错误代码</p>
-   * <p>1:只允许使用中文、字母、数字、下划线。</p>
-   * <p>2:该用户名已存在。</p>
-   * <p>3:用户名过长。</p>
-   * <p></p>
-   * <p>0:成功</p>
+   * @return boolean is success
    */
   public static function checkusername($username) {
     global $db;
 
     $len = mb_strlen($username, 'utf8');
-    if ($len > 20 || $len < 1) {
-      return 3;
+    if ($len > 16 || $len < 1) {
+      self::$error = '用户名过长。';
+      return false;
     }
 
-    if (!preg_match("/^[\x{4e00}-\x{9fa5}A-Za-z_][\x{4e00}-\x{9fa5}A-Za-z0-9_]+$/u", $username)) {
-      return 1;
+    if (!preg_match("/^[A-Za-z_][A-Za-z0-9_]+$/", $username)) {
+      self::$error = '只允许使用字母、数字、下划线且不以数字开头。';
+      return false;
     }
 
     $isexists = $db->query("SELECT `uid` FROM `user` WHERE `username` = '{$username}'");
     if ($isexists->num_rows > 0) {
-      return 2;
+      self::$error = '该用户名已存在。';
+      return false;
     }
 
-    return 0;
+    return true;
   }
 
 }

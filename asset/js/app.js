@@ -6,22 +6,25 @@
     ])
     .config(['$mdThemingProvider', '$mdIconProvider', '$routeProvider', '$locationProvider',
       function ($mdThemingProvider, $mdIconProvider, $routeProvider, $locationProvider) {
-      $mdThemingProvider.theme('default')
-        .primaryPalette('blue')
-        .accentPalette('orange')
-        .warnPalette('red');
+        $mdThemingProvider.theme('default')
+          .primaryPalette('blue')
+          .accentPalette('orange')
+          .warnPalette('red');
 
         $mdIconProvider.defaultIconSet('asset/material-icons/default-set.svg', 24);
 
         $routeProvider
-          .when('/list', {
-            templateUrl: 'datalist.html',
+          .when('/list/:query?', {
+            templateUrl: 'datalist.html'
           })
           .when('/rpg/new', {
-            templateUrl: 'newdata.html',
+            templateUrl: 'newdata.html'
           })
           .when('/rpg/:oid', {
-            templateUrl: 'datacontent.html',
+            templateUrl: 'datacontent.html'
+          })
+          .when('/user/:username', {
+            templateUrl: 'userdata.html'
           })
           .otherwise({
             redirectTo: '/list'
@@ -30,7 +33,7 @@
         $locationProvider
           .html5Mode(false)
           .hashPrefix('!');
-    }]);
+      }]);
 
   if (!Array.prototype.find) {
     Array.prototype.find = function (predicate) {
@@ -55,7 +58,7 @@
     };
   }
 
-  window.ObjectSize = function(obj) {
+  window.ObjectSize = function (obj) {
     var size = 0, key;
     for (key in obj) {
       if (obj.hasOwnProperty(key)) size++;
@@ -63,4 +66,5 @@
     return size;
   };
 })(window, angular)
-;;
+;
+;
