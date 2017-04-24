@@ -3,7 +3,7 @@
 define('DATA_ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('ROOT', dirname(DATA_ROOT) . DIRECTORY_SEPARATOR);
 
-define('version', '17.04.07');
+define('version', '17.04.08');
 define('cookieSuffix', 'rpgp_');
 define('authcodeKey', 'A66K6ozVsK6g6bZ6E7hohnvhh1Eh6kf6');
 define('usesourcecode', false);

@@ -72,7 +72,7 @@
 <script
   src="https://cdn.jsdelivr.net/g/angularjs@1.6.0(angular.min.js+angular-animate.min.js+angular-aria.min.js+angular-cookies.min.js+angular-route.min.js+i18n/angular-locale_zh.js),angular.material@1.1.4,angular-local-storage@0.5.2(angular-local-storage.min.js),angular.file-upload@12.2.13"></script>
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/g/angular.material@1.1.3(angular-material.min.css)">
+      href="https://cdn.jsdelivr.net/g/angular.material@1.1.4(angular-material.min.css)">
 <!--link rel="stylesheet" href="asset/material-icons/material-icons.css"-->
 
 <?php if (usesourcecode) : ?>
@@ -363,10 +363,30 @@
     <div md-whiteframe="2" layout-padding ng-if="userdetail">
       <strong class="md-headline">{{userdetail.username}}</strong>
       <p><span ng-bind="userdetail.create_time * 1000 | date:'y-M-d'"></span> 加入</p>
-      <p>
-        <a ng-href="#!/list/uid:{{userdetail.uid}}"><strong ng-bind="userdetail.order_count"></strong> 个列表</a>
-      </p>
     </div>
+    <section class="user-created" ng-if="userdetail.order_count">
+      <md-list flex>
+        <md-subheader class="md-no-sticky"><strong ng-bind="userdetail.order_count"></strong> 个列表</md-subheader>
+        <md-list-item class="md-3-line md-long-text" ng-repeat="item in userdetail.created">
+          <img ng-src="{{item.cover.path || 'asset/img/takara.svg'}}" class="md-avatar">
+          <div class="md-list-item-text">
+            <h3>{{item.title}}</h3>
+            <h4>{{item.create_time | date:'longDate'}}</h4>
+            <p>
+              {{item.description}}
+            </p>
+          </div>
+          <md-icon class="md-secondary"
+                   ng-click="user.deleteRpg(item)"
+                   aria-label="delete"
+                   md-svg-icon="close"></md-icon>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item ng-href="#!/list/uid:{{userdetail.uid}}">
+          <p>查看全部</p>
+        </md-list-item>
+      </md-list>
+    </section>
   </div>
 </script>
 <script type="text/ng-template" id="registerPanel.html">

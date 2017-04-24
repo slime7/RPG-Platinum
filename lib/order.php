@@ -1,4 +1,5 @@
 <?php
+
 namespace slime7\rpgplatinum;
 
 use slime7\rpgplatinum\module\comm;
@@ -275,7 +276,8 @@ SELECT
 	`cover_info`.`height` AS `cover_height`,
 	`cover_info`.`upload_time` AS `cover_time`,
 	`rpgp_order_breif`.`origin_oid`,
-	`rpgp_order_breif`.`state`
+	`rpgp_order_breif`.`state`,
+	(SELECT COUNT(`pid`) FROM `rpgp_progress` WHERE `rpgp_progress`.`oid` = `rpgp_order_breif`.`oid`) AS `progress_count`
 FROM
 	`rpgp_order_breif`
 	JOIN `user` AS `a_name` ON `rpgp_order_breif`.`author` = `a_name`.`uid`
@@ -305,7 +307,8 @@ sql;
         ],
         'title' => $row['title'],
         'description' => $row['description'],
-        'chapters' => []
+        'chapters' => [],
+        'progress_count' => (int)$row['progress_count']
       ];
     }
     unset($row);
@@ -499,6 +502,34 @@ sql;
         'pagesize' => $this->pagesize,
       ]
     ];
+  }
+
+  public function deleteRpg($oid) {
+    if (!$oid) {
+      return false;
+    }
+    global $db, $uid;
+
+    $oid = (int)$oid;
+    $delete_item_affected_result = $delete_progress_affected_result = false;
+    $db->autocommit(false);
+    $db->query("DELETE FROM `rpgp_order_breif` WHERE `oid` = '{$oid}' AND `author` = '{$uid}'");
+    $delete_breif_affected_result = $db->affected_rows > 0;
+    if ($delete_breif_affected_result) {
+      $db->query("DELETE FROM `rpgp_order_item` WHERE `oid` = '{$oid}'");
+      $delete_item_affected_result = $db->affected_rows > 0;
+      $db->query("DELETE FROM `rpgp_progress` WHERE `oid` = '{$oid}'");
+      $delete_progress_affected_result = $db->affected_rows > 0;
+    }
+    if ($delete_item_affected_result && $delete_progress_affected_result) {
+      $db->commit();
+      $db->autocommit(true);
+      return true;
+    } else {
+      $db->rollback();
+      $db->autocommit(true);
+      return false;
+    }
   }
 
   public function setQuery($query) {

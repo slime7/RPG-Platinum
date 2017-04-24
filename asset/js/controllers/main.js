@@ -40,7 +40,7 @@
           now: 'datalist.html',
           last: null,
           config: angular.fromJson(document.querySelector('#page-config').value),
-          loadingCircular: false
+          loadingCircular: 0
         };
         var autoSaveTimeout;
         var subTemplate = {name: '', level: 0, type: 'root', sub: []};
@@ -84,9 +84,9 @@
           },
           load: function () {
             $http.post('actions/ajax.php', {
-                action: 'load',
-                oid: $scope.rpg.detail.oid
-              })
+              action: 'load',
+              oid: $scope.rpg.detail.oid
+            })
               .then(function (response) {
                 var json = response.data;
                 if (json.success) {
@@ -347,6 +347,31 @@
               clickOutsideToClose: false,
               fullscreen: true
             });
+          },
+          deleteRpg: function (rpg) {
+            var c = confirm('此列表有 ' + rpg.progress_count + ' 个进度，删除后无法恢复，确定要删除 ' + rpg.title + ' 吗？');
+            if (!c) {
+              return;
+            }
+
+            $http.post('actions/ajax.php', {action: 'deleterpg', oid: rpg.oid})
+              .then(function (response) {
+                var json = response.data;
+                if (json.success) {
+                  var i = $scope.userdetail.created.indexOf(rpg);
+                  $scope.userdetail.created.splice(i, 1);
+                } else {
+                  main.toast(json.msg);
+                }
+              }, function (response) {
+                $scope.page.loadingCircular -= 1;
+                var json = response.data;
+                if (json.msg) {
+                  main.toast(json.msg);
+                } else {
+                  main.toast('server error.');
+                }
+              });
           }
         };
 
@@ -429,10 +454,10 @@
 
         var main = {
           getRpgData: function (oid) {
-            $scope.page.loadingCircular = true;
+            $scope.page.loadingCircular += 1;
             $http.post('actions/ajax.php', {action: 'rpgdetail', oid: oid})
               .then(function (response) {
-                $scope.page.loadingCircular = false;
+                $scope.page.loadingCircular -= 1;
                 var json = response.data;
                 $scope.rpg.detail = json.data[0];
                 main.getLocalProgress();
@@ -440,7 +465,7 @@
           },
           getListData: function () {
             $scope.rpg.listsPager = null;
-            $scope.page.loadingCircular = true;
+            $scope.page.loadingCircular += 1;
             var req = {action: 'rpglist'};
             if ($scope.rpg.listsPager && $scope.rpg.listsPager.page) {
               req['page'] = $scope.rpg.listsPager.page + 1;
@@ -450,7 +475,7 @@
             }
             $http.post('actions/ajax.php', req)
               .then(function (response) {
-                $scope.page.loadingCircular = false;
+                $scope.page.loadingCircular -= 1;
                 var json = response.data;
                 $scope.rpg.listsPager = json.data.pager;
                 if ($scope.rpg.listsPager.page !== 1) {
@@ -461,7 +486,7 @@
                   $scope.rpg.lists = json.data.orderList;
                 }
               }, function (response) {
-                $scope.page.loadingCircular = false;
+                $scope.page.loadingCircular -= 1;
                 var json = response.data;
                 if (json.msg) {
                   main.toast(json.msg);
@@ -482,7 +507,7 @@
             }
           },
           getUserData: function (username) {
-            $scope.page.loadingCircular = true;
+            $scope.page.loadingCircular += 1;
             $scope.userdetail = null;
             $http.post('actions/ajax.php',
               {
@@ -490,7 +515,7 @@
                 username: username
               })
               .then(function (response) {
-                $scope.page.loadingCircular = false;
+                $scope.page.loadingCircular -= 1;
                 var json = response.data;
                 if (json.success) {
                   $scope.userdetail = json.data;
@@ -498,7 +523,7 @@
                   main.toast(json.msg);
                 }
               }, function (response) {
-                $scope.page.loadingCircular = false;
+                $scope.page.loadingCircular -= 1;
                 var json = response.data;
                 if (json.msg) {
                   main.toast(json.msg);

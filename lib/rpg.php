@@ -66,6 +66,10 @@ class rpg
         $this->userdetail($json, $post);
         break;
 
+      case 'deleterpg':
+        $this->deleterpg($json, $post);
+        break;
+
       default:
         $this->test();
         break;
@@ -82,7 +86,7 @@ class rpg
     global $uid;
 
     if (!isset($post['username']) || !isset($post['password'])) {
-      $this->errorResponse('Unkonw action.', false);
+      $this->errorResponse('Unkonw action.');
     }
     $login_result = user::login($post['username'], $post['password']);
     if ($login_result) {
@@ -115,7 +119,7 @@ class rpg
 
   private function register(jsonpack $json, $post) {
     if (!isset($post['username']) || !isset($post['password'])) {
-      $this->errorResponse('Unkonw action.', false);
+      $this->errorResponse('Unkonw action.');
     }
 
     $register_result = user::register($post);
@@ -129,11 +133,14 @@ class rpg
 
   private function userdetail(jsonpack $json, $post) {
     if (!isset($post['username'])) {
-      $this->errorResponse('Unkonw action.', false);
+      $this->errorResponse('Unkonw action.');
     }
 
     $user = user::detailbyusername($post['username']);
     if (!!$user) {
+      $order = new order('uid:' . $user['uid']);
+      $created = $order->lists(1, 20);
+      $user['created'] = $created['orderList'];
       $json->success();
       $json->set($user);
     } else {
@@ -149,7 +156,7 @@ class rpg
     if (isset($post['query']) && !!trim($post['query'])) {
       $order->setQuery($post['query']);
     }
-    $orderList = $order->lists($page, $pagesize, false);
+    $orderList = $order->lists($page, $pagesize);
 
     $json->set($orderList);
     $json->success();
@@ -161,7 +168,7 @@ class rpg
     global $uid;
 
     if (!isset($post['oid'])) {
-      $this->errorResponse('Need oid.', false);
+      $this->errorResponse('Need oid.');
     }
     $order = new order('oid:' . $post['oid']);
     if ($uid) {
@@ -180,12 +187,12 @@ class rpg
     global $uid;
 
     if (!$uid) {
-      $this->errorResponse('Need login.', false);
+      $this->errorResponse('Need login.');
     }
     $order = new order();
     $newRpgResult = $order->newRpg($post, $files, $uid);
     if (!$newRpgResult) {
-      $this->errorResponse($order->error, false);
+      $this->errorResponse($order->error);
     }
 
     //$json->add('post', $post);
@@ -198,10 +205,10 @@ class rpg
     global $uid;
 
     if (!$uid) {
-      $this->errorResponse('Need login.', false);
+      $this->errorResponse('Need login.');
     }
     if (!isset($post['oid'])) {
-      $this->errorResponse('Need oid.', false);
+      $this->errorResponse('Need oid.');
     }
     $order = new order('oid:' . $post['oid']);
     $result = $order->saveProgress($post, $uid);
@@ -219,10 +226,10 @@ class rpg
     global $uid;
 
     if (!$uid) {
-      $this->errorResponse('Need login.', false);
+      $this->errorResponse('Need login.');
     }
     if (!isset($post['oid'])) {
-      $this->errorResponse('Need oid.', false);
+      $this->errorResponse('Need oid.');
     }
 
     $order = new order('oid:' . $post['oid']);
@@ -230,6 +237,27 @@ class rpg
 
     $json->set($progress);
     $json->success();
+    $this->response($json);
+  }
+
+  private function deleterpg(jsonpack $json, $post) {
+    user::check_login();
+    global $uid;
+
+    if (!$uid) {
+      $this->errorResponse('Need login.');
+    }
+    if (!isset($post['oid'])) {
+      $this->errorResponse('Need oid.');
+    }
+
+    $order = new order();
+    $result = $order->deleteRpg($post['oid']);
+    if ($result) {
+      $json->success();
+    } else {
+      $json->setMsg('删除失败。');
+    }
     $this->response($json);
   }
 

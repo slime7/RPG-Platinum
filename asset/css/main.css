@@ -307,3 +307,7 @@ md-toolbar .md-headline {
 .register-panel {
   min-width: 350px;
 }
+
+.user-created .md-avatar {
+  border-radius: 0;
+}
