@@ -139,7 +139,7 @@ class rpg
     $user = user::detailbyusername($post['username']);
     if (!!$user) {
       $order = new order('uid:' . $user['uid']);
-      $created = $order->lists(1, 20);
+      $created = $order->lists(1, 100);
       $user['created'] = $created['orderList'];
       $json->success();
       $json->set($user);

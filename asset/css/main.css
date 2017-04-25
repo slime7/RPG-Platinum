@@ -308,6 +308,14 @@ md-toolbar .md-headline {
   min-width: 350px;
 }
 
+.user-created {
+  margin-top: 24px;
+}
+
+.user-created > md-list {
+  padding: 0;
+}
+
 .user-created .md-avatar {
   border-radius: 0;
 }

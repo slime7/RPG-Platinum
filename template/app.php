@@ -364,26 +364,23 @@
       <strong class="md-headline">{{userdetail.username}}</strong>
       <p><span ng-bind="userdetail.create_time * 1000 | date:'y-M-d'"></span> 加入</p>
     </div>
-    <section class="user-created" ng-if="userdetail.order_count">
+    <section md-whiteframe="2" class="user-created" ng-if="userdetail.order_count">
       <md-list flex>
-        <md-subheader class="md-no-sticky"><strong ng-bind="userdetail.order_count"></strong> 个列表</md-subheader>
-        <md-list-item class="md-3-line md-long-text" ng-repeat="item in userdetail.created">
+        <md-list-item>
+          我的列表(<span ng-bind="userdetail.order_count"></span>)
+        </md-list-item>
+        <md-divider ng-repeat-start="item in userdetail.created"></md-divider>
+        <md-list-item class="md-2-line" ng-repeat-end>
           <img ng-src="{{item.cover.path || 'asset/img/takara.svg'}}" class="md-avatar">
           <div class="md-list-item-text">
             <h3>{{item.title}}</h3>
             <h4>{{item.create_time | date:'longDate'}}</h4>
-            <p>
-              {{item.description}}
-            </p>
           </div>
+          <md-button class="md-secondary md-raised md-primary" ng-href="#!/rpg/{{item.oid}}">查看</md-button>
           <md-icon class="md-secondary"
                    ng-click="user.deleteRpg(item)"
                    aria-label="delete"
                    md-svg-icon="close"></md-icon>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-list-item ng-href="#!/list/uid:{{userdetail.uid}}">
-          <p>查看全部</p>
         </md-list-item>
       </md-list>
     </section>
