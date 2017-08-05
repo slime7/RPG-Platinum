@@ -11,7 +11,7 @@
           .accentPalette('orange')
           .warnPalette('red');
 
-        $mdIconProvider.defaultIconSet('asset/material-icons/default-set.svg', 24);
+        $mdIconProvider.defaultIconSet('asset/img/default-set.svg', 24);
 
         $routeProvider
           .when('/list/:query?', {

@@ -63,17 +63,22 @@
     </md-button>
   </md-content>
 </div>
-<div class="loading-circular" layout="row" layout-align="center center" ng-if="page.loadingCircular">
+<div class="loading-circular" layout="row" layout-align="center center" ng-show="page.loadingCircular">
   <md-progress-circular
     class="md-accent"
     md-diameter="40"></md-progress-circular>
 </div>
 
-<script
-  src="https://cdn.jsdelivr.net/g/angularjs@1.6.0(angular.min.js+angular-animate.min.js+angular-aria.min.js+angular-cookies.min.js+angular-route.min.js+i18n/angular-locale_zh.js),angular.material@1.1.4,angular-local-storage@0.5.2(angular-local-storage.min.js),angular.file-upload@12.2.13"></script>
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/g/angular.material@1.1.4(angular-material.min.css)">
-<!--link rel="stylesheet" href="asset/material-icons/material-icons.css"-->
+<script src="asset/lib/angularjs/1.6.0/angular.min.js"></script>
+<script src="asset/lib/angularjs/1.6.0/angular-animate.min.js"></script>
+<script src="asset/lib/angularjs/1.6.0/angular-aria.min.js"></script>
+<script src="asset/lib/angularjs/1.6.0/angular-cookies.min.js"></script>
+<script src="asset/lib/angularjs/1.6.0/angular-route.min.js"></script>
+<script src="asset/lib/angularjs/1.6.0/i18n/angular-locale_zh.js"></script>
+<script src="asset/lib/angular.material/1.1.4/angular-material.min.js"></script>
+<script src="asset/lib/angular-local-storage/0.5.2/angular-local-storage.min.js"></script>
+<script src="asset/lib/ng-file-upload/12.2.13/ng-file-upload.min.js"></script>
+<link rel="stylesheet" href="asset/lib/angular.material/1.1.4/angular-material.min.css">
 
 <?php if (usesourcecode) : ?>
   <script src="asset/js/app.js<?= '?v=' . version ?>"></script>

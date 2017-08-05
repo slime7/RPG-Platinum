@@ -81,6 +81,8 @@ class user
           $login_check = self::login_string($db_password);
 
           if ($login_check === $login_string) {
+            $exptime = time() + 900;
+            comm::ssetcookie('token', comm::authcode("{$uid}\t{$username}\t{$exptime}\t{$login_string}", 'ENCODE'), 3600 * 24 * 365);
 
             return true;
           }

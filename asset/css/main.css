@@ -92,19 +92,25 @@ md-toolbar.thin > .md-toolbar-tools {
   left: 0;
   right: 0;
   width: 100%;
+  z-index: 10;
 }
 
-.loading-circular.ng-enter, .loading-circular.ng-leave {
+.loading-circular.ng-enter, .loading-circular.ng-leave,
+.loading-circular.ng-hide-remove, .loading-circular.ng-hide-add {
   transition: all ease 0.5s;
 }
 
 .loading-circular.ng-leave,
-.loading-circular.ng-enter.ng-enter-active {
+.loading-circular.ng-enter.ng-enter-active,
+.loading-circular.ng-hide-add,
+.loading-circular.ng-hide-remove.ng-hide-remove-active {
   top: 96px;
 }
 
 .loading-circular.ng-enter,
-.loading-circular.ng-leave.ng-leave-active {
+.loading-circular.ng-leave.ng-leave-active,
+.loading-circular.ng-hide-remove,
+.loading-circular.ng-hide-add.ng-hide-add-active {
   top: -40px;
 }
 
